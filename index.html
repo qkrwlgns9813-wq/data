@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>성적 분석 시스템 - Grade Analysis Dashboard</title>
+    <meta name="description" content="학생 성적을 시각화하고 분석하는 인터랙티브 대시보드">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="header-left">
+                    <div class="logo">
+                        <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="40" height="40" rx="12" fill="url(#gradient1)"/>
+                            <path d="M12 20L18 26L28 14" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                            <defs>
+                                <linearGradient id="gradient1" x1="0" y1="0" x2="40" y2="40">
+                                    <stop offset="0%" stop-color="#667eea"/>
+                                    <stop offset="100%" stop-color="#764ba2"/>
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                        <h1>성적 분석 시스템</h1>
+                    </div>
+                    <p class="subtitle">Grade Analysis Dashboard</p>
+                </div>
+                <div class="header-right">
+                    <div class="stats-badge">
+                        <span class="badge-label">총 학생 수</span>
+                        <span class="badge-value" id="totalStudents">0</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Filter Section -->
+            <section class="filter-section">
+                <div class="filter-card">
+                    <h2>필터 및 검색</h2>
+                    <div class="filter-controls">
+                        <div class="filter-group">
+                            <label for="classFilter">분반 선택</label>
+                            <select id="classFilter" class="select-input">
+                                <option value="all">전체 분반</option>
+                                <option value="1">1분반</option>
+                                <option value="2">2분반</option>
+                                <option value="3">3분반</option>
+                                <option value="4">4분반</option>
+                                <option value="5">5분반</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label for="searchInput">학생 검색</label>
+                            <input type="text" id="searchInput" class="text-input" placeholder="학생 이름 또는 번호...">
+                        </div>
+                        <div class="filter-group">
+                            <label for="sortBy">정렬 기준</label>
+                            <select id="sortBy" class="select-input">
+                                <option value="number">번호순</option>
+                                <option value="total-desc">총점 높은순</option>
+                                <option value="total-asc">총점 낮은순</option>
+                                <option value="final-desc">기말고사 높은순</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Statistics Overview -->
+            <section class="stats-overview">
+                <div class="stat-card stat-card-primary">
+                    <div class="stat-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
+                        </svg>
+                    </div>
+                    <div class="stat-content">
+                        <h3>평균 점수</h3>
+                        <p class="stat-value" id="avgScore">0.0</p>
+                        <span class="stat-label">전체 평균</span>
+                    </div>
+                </div>
+
+                <div class="stat-card stat-card-success">
+                    <div class="stat-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
+                            <polyline points="17 6 23 6 23 12"/>
+                        </svg>
+                    </div>
+                    <div class="stat-content">
+                        <h3>최고 점수</h3>
+                        <p class="stat-value" id="maxScore">0.0</p>
+                        <span class="stat-label" id="maxStudent">-</span>
+                    </div>
+                </div>
+
+                <div class="stat-card stat-card-warning">
+                    <div class="stat-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/>
+                            <polyline points="17 18 23 18 23 12"/>
+                        </svg>
+                    </div>
+                    <div class="stat-content">
+                        <h3>최저 점수</h3>
+                        <p class="stat-value" id="minScore">0.0</p>
+                        <span class="stat-label" id="minStudent">-</span>
+                    </div>
+                </div>
+
+                <div class="stat-card stat-card-info">
+                    <div class="stat-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="1" x2="12" y2="23"/>
+                            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                        </svg>
+                    </div>
+                    <div class="stat-content">
+                        <h3>표준 편차</h3>
+                        <p class="stat-value" id="stdDev">0.0</p>
+                        <span class="stat-label">점수 분산도</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Charts Section -->
+            <section class="charts-section">
+                <div class="chart-card">
+                    <h2>분반별 평균 점수</h2>
+                    <div class="chart-container">
+                        <canvas id="classChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="chart-card">
+                    <h2>점수 분포</h2>
+                    <div class="chart-container">
+                        <canvas id="distributionChart"></canvas>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Grade Distribution -->
+            <section class="grade-distribution">
+                <div class="chart-card full-width">
+                    <h2>성적 등급 분포</h2>
+                    <div class="grade-bars">
+                        <div class="grade-bar-item">
+                            <div class="grade-label">
+                                <span class="grade-letter grade-a">A</span>
+                                <span class="grade-range">90-100</span>
+                            </div>
+                            <div class="grade-bar-container">
+                                <div class="grade-bar grade-bar-a" id="gradeBarA" style="width: 0%"></div>
+                                <span class="grade-count" id="gradeCountA">0명</span>
+                            </div>
+                        </div>
+                        <div class="grade-bar-item">
+                            <div class="grade-label">
+                                <span class="grade-letter grade-b">B</span>
+                                <span class="grade-range">80-89</span>
+                            </div>
+                            <div class="grade-bar-container">
+                                <div class="grade-bar grade-bar-b" id="gradeBarB" style="width: 0%"></div>
+                                <span class="grade-count" id="gradeCountB">0명</span>
+                            </div>
+                        </div>
+                        <div class="grade-bar-item">
+                            <div class="grade-label">
+                                <span class="grade-letter grade-c">C</span>
+                                <span class="grade-range">70-79</span>
+                            </div>
+                            <div class="grade-bar-container">
+                                <div class="grade-bar grade-bar-c" id="gradeBarC" style="width: 0%"></div>
+                                <span class="grade-count" id="gradeCountC">0명</span>
+                            </div>
+                        </div>
+                        <div class="grade-bar-item">
+                            <div class="grade-label">
+                                <span class="grade-letter grade-d">D</span>
+                                <span class="grade-range">60-69</span>
+                            </div>
+                            <div class="grade-bar-container">
+                                <div class="grade-bar grade-bar-d" id="gradeBarD" style="width: 0%"></div>
+                                <span class="grade-count" id="gradeCountD">0명</span>
+                            </div>
+                        </div>
+                        <div class="grade-bar-item">
+                            <div class="grade-label">
+                                <span class="grade-letter grade-f">F</span>
+                                <span class="grade-range">0-59</span>
+                            </div>
+                            <div class="grade-bar-container">
+                                <div class="grade-bar grade-bar-f" id="gradeBarF" style="width: 0%"></div>
+                                <span class="grade-count" id="gradeCountF">0명</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Student Table -->
+            <section class="table-section">
+                <div class="table-card">
+                    <div class="table-header">
+                        <h2>학생 성적 목록</h2>
+                        <button class="btn-export" id="exportBtn">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                <polyline points="7 10 12 15 17 10"/>
+                                <line x1="12" y1="15" x2="12" y2="3"/>
+                            </svg>
+                            내보내기
+                        </button>
+                    </div>
+                    <div class="table-wrapper">
+                        <table class="data-table" id="studentTable">
+                            <thead>
+                                <tr>
+                                    <th>분반</th>
+                                    <th>번호</th>
+                                    <th>이름</th>
+                                    <th>기말고사</th>
+                                    <th>수행1</th>
+                                    <th>수행2</th>
+                                    <th>수행3</th>
+                                    <th>총점</th>
+                                    <th>등급</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tableBody">
+                                <!-- Data will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>&copy; 2026 Grade Analysis System. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <!-- Chart.js Library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
